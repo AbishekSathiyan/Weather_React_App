@@ -28,7 +28,7 @@ This is a simple React Weather App built using **Vite** and **React Icons**. It 
 ## 🛠️ Installation and Setup
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/abisheksathiyan/weather-app.git
+   git clone https://github.com/AbishekSathiyan/Weather_React_App.git
    cd weather-app
    ```
 
