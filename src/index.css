@@ -5,3 +5,21 @@
   line-height: 1.5;
   font-weight: 400;
 }
+
+@keyframes cloudMove {
+  0% { transform: translateX(-200px); }
+  100% { transform: translateX(100vw); }
+}
+
+.cloud {
+  position: absolute;
+  top: 20%;
+  left: -200px;
+  width: 200px;
+  height: 120px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: cloudMove 60s linear infinite;
+  box-shadow: 60px 0 #fff, 120px 0 #fff;
+}
