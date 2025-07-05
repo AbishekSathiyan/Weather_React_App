@@ -23,7 +23,7 @@ import {
 } from "react-icons/wi";
 import { ImSpinner9 } from "react-icons/im";
 import html2canvas from "html2canvas";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 const Weather = () => {
   const [city, setCity] = useState("");
@@ -32,16 +32,14 @@ const Weather = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [history, setHistory] = useState([]);
-  const [theme, setTheme] = useState("default"); // 'default', 'dark', 'rainy', 'sunny'
+  const [theme, setTheme] = useState("default");
   const cardRef = useRef(null);
-  const containerRef = useRef(null);
 
   const apiKey = "01fa927cb5f85e92ee612fee22b42a84";
 
   useEffect(() => {
     const link = document.createElement("link");
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap";
+    link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap";
     link.rel = "stylesheet";
     document.head.appendChild(link);
 
@@ -52,7 +50,6 @@ const Weather = () => {
         fetchForecastByCoords(latitude, longitude);
       },
       () => {
-        // Default to London if geolocation fails
         fetchWeatherByCoords(51.5074, -0.1278);
         fetchForecastByCoords(51.5074, -0.1278);
       }
@@ -183,22 +180,14 @@ const Weather = () => {
 
   const getWeatherIcon = (weather) => {
     switch (weather) {
-      case "Clear":
-        return <WiDaySunny className="text-5xl" />;
-      case "Clouds":
-        return <WiCloudy className="text-5xl" />;
-      case "Rain":
-        return <WiRain className="text-5xl" />;
-      case "Snow":
-        return <WiSnow className="text-5xl" />;
-      case "Thunderstorm":
-        return <WiThunderstorm className="text-5xl" />;
-      case "Drizzle":
-        return <WiRain className="text-5xl" />;
-      case "Mist":
-        return <WiFog className="text-5xl" />;
-      default:
-        return <WiDaySunny className="text-5xl" />;
+      case "Clear": return <WiDaySunny className="text-5xl" />;
+      case "Clouds": return <WiCloudy className="text-5xl" />;
+      case "Rain": return <WiRain className="text-5xl" />;
+      case "Snow": return <WiSnow className="text-5xl" />;
+      case "Thunderstorm": return <WiThunderstorm className="text-5xl" />;
+      case "Drizzle": return <WiRain className="text-5xl" />;
+      case "Mist": return <WiFog className="text-5xl" />;
+      default: return <WiDaySunny className="text-5xl" />;
     }
   };
 
@@ -247,36 +236,26 @@ const Weather = () => {
   const themeStyles = getThemeStyles();
 
   return (
-    <div
-      ref={containerRef}
-      className={`relative min-h-screen bg-gradient-to-br ${themeStyles.bg} flex flex-col items-center p-4 sm:p-6 ${themeStyles.text} font-sans overflow-y-auto`}
-      style={{ fontFamily: "'Poppins', sans-serif", height: "100vh" }}
-    >
+    <div className={`relative min-h-screen bg-gradient-to-br ${themeStyles.bg} flex flex-col ${themeStyles.text} font-sans`} style={{ fontFamily: "'Poppins', sans-serif" }}>
       {/* Theme Toggle */}
       <div className="absolute top-4 right-4 flex gap-2 z-20">
-        <button
-          onClick={() => setTheme("dark")}
-          className={`p-2 rounded-full ${
-            theme === "dark" ? "bg-gray-700" : "bg-gray-500/30"
-          } hover:bg-gray-700 transition-colors`}
+        <button 
+          onClick={() => setTheme("dark")} 
+          className={`p-2 rounded-full ${theme === "dark" ? "bg-gray-700" : "bg-gray-500/30"} hover:bg-gray-700 transition-colors`}
           title="Dark Mode"
         >
           <FaMoon />
         </button>
-        <button
-          onClick={() => setTheme("sunny")}
-          className={`p-2 rounded-full ${
-            theme === "sunny" ? "bg-amber-500" : "bg-amber-500/30"
-          } hover:bg-amber-500 transition-colors`}
+        <button 
+          onClick={() => setTheme("sunny")} 
+          className={`p-2 rounded-full ${theme === "sunny" ? "bg-amber-500" : "bg-amber-500/30"} hover:bg-amber-500 transition-colors`}
           title="Sunny Mode"
         >
           <FaSun />
         </button>
-        <button
-          onClick={() => setTheme("rainy")}
-          className={`p-2 rounded-full ${
-            theme === "rainy" ? "bg-blue-600" : "bg-blue-500/30"
-          } hover:bg-blue-600 transition-colors`}
+        <button 
+          onClick={() => setTheme("rainy")} 
+          className={`p-2 rounded-full ${theme === "rainy" ? "bg-blue-600" : "bg-blue-500/30"} hover:bg-blue-600 transition-colors`}
           title="Rainy Mode"
         >
           <FaCloudRain />
@@ -293,7 +272,7 @@ const Weather = () => {
       {theme === "rainy" && (
         <>
           {[...Array(15)].map((_, i) => (
-            <div
+            <div 
               key={i}
               className="absolute top-0 h-1 bg-blue-300 rounded-full animate-rain"
               style={{
@@ -310,7 +289,7 @@ const Weather = () => {
       {theme === "dark" && (
         <>
           {[...Array(20)].map((_, i) => (
-            <div
+            <div 
               key={i}
               className="absolute bg-white rounded-full animate-twinkle"
               style={{
@@ -326,226 +305,202 @@ const Weather = () => {
         </>
       )}
 
-      <motion.div
-        className="w-full max-w-4xl mx-auto flex flex-col items-center"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-center">
-          {getWeatherIcon(weatherData?.weather[0].main || "Clear")} Weather
-          Forecast
-        </h1>
-
-        {/* Search Section */}
-        <div
-          className={`${themeStyles.card} backdrop-blur-md rounded-xl shadow-lg w-full max-w-md p-4 mb-6`}
-        >
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-              <input
-                type="text"
-                placeholder="Enter city name..."
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && getWeather()}
-                className="w-full pl-10 p-3 rounded-lg bg-white/90 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-sm"
-              />
-            </div>
-            <button
-              onClick={getWeather}
-              className={`${themeStyles.button} text-white px-4 py-3 rounded-lg shadow-md transition-all hover:scale-105 flex items-center justify-center gap-2`}
-            >
-              <FaSearch /> Search
-            </button>
-          </div>
-
-          {loading && (
-            <div className="flex justify-center py-4">
-              <ImSpinner9 className="animate-spin text-3xl" />
-            </div>
-          )}
-
-          {error && (
-            <div
-              className={`${themeStyles.error} text-white px-4 py-2 rounded-lg text-center mt-2 text-sm`}
-            >
-              {error}
-            </div>
-          )}
-        </div>
-
-        {/* Current Weather */}
-        {weatherData && (
-          <motion.div
-            ref={cardRef}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className={`${themeStyles.card} w-full max-w-md p-5 rounded-xl shadow-xl mb-8`}
-          >
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h2 className="text-xl font-bold flex items-center gap-2">
-                  <FaMapMarkerAlt className="text-red-500" />
-                  {weatherData.name}, {weatherData.sys.country}
-                </h2>
-                <p className="text-sm opacity-80">
-                  {new Date().toLocaleDateString("en-US", {
-                    weekday: "long",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </p>
-              </div>
-              <div className="text-4xl">
-                {getWeatherIcon(weatherData.weather[0].main)}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3 mb-4">
-              <div
-                className={`${themeStyles.metric} p-3 rounded-lg flex flex-col items-center`}
-              >
-                <FaTemperatureHigh className="text-xl mb-1" />
-                <p className="text-sm">Temp</p>
-                <p className="text-xl font-bold">
-                  {Math.round(weatherData.main.temp)}°C
-                </p>
-              </div>
-              <div
-                className={`${themeStyles.metric} p-3 rounded-lg flex flex-col items-center`}
-              >
-                <FaTint className="text-xl mb-1" />
-                <p className="text-sm">Humidity</p>
-                <p className="text-xl font-bold">
-                  {weatherData.main.humidity}%
-                </p>
-              </div>
-              <div
-                className={`${themeStyles.metric} p-3 rounded-lg flex flex-col items-center`}
-              >
-                <FaWind className="text-xl mb-1" />
-                <p className="text-sm">Wind</p>
-                <p className="text-xl font-bold">
-                  {weatherData.wind.speed} m/s
-                </p>
-              </div>
-            </div>
-
-            <div className={`${themeStyles.metric} p-3 rounded-lg text-center`}>
-              <p className="text-sm">Conditions</p>
-              <p className="text-lg font-medium capitalize">
-                {weatherData.weather[0].description}
-              </p>
-            </div>
-
-            <button
-              onClick={downloadScreenshot}
-              className={`w-full mt-4 ${themeStyles.button} text-white py-2 px-4 rounded-lg transition-all hover:scale-[1.02] shadow-md`}
-            >
-              📸 Download Weather Card
-            </button>
-          </motion.div>
-        )}
-
-        {/* Forecast & History */}
-        <div className="w-full space-y-6">
-          {/* 7-Day Forecast */}
-          {forecastData && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="w-full"
-            >
-              <h2 className="text-xl font-semibold mb-3 text-center">
-                5-Day Forecast
-              </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
-                {forecastData.map((day, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    whileHover={{ scale: 1.05 }}
-                    className={`${themeStyles.metric} p-2 rounded-lg flex flex-col items-center`}
-                  >
-                    <p className="font-medium text-sm">
-                      {getDayName(day.dt_txt)}
-                    </p>
-                    <div className="my-1">
-                      {getWeatherIcon(day.weather[0].main)}
-                    </div>
-                    <p className="font-bold">{Math.round(day.main.temp)}°</p>
-                    <p className="text-xs opacity-80 capitalize">
-                      {day.weather[0].description}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Search History */}
-          {history.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="w-full"
-            >
-              <h2 className="text-xl font-semibold mb-3 text-center">
-                Recent Searches
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {history.map((item, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    whileHover={{ scale: 1.02 }}
-                    className={`${themeStyles.card} p-3 rounded-lg shadow-sm`}
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <FaMapMarkerAlt
-                        className={
-                          theme === "sunny"
-                            ? "text-amber-500"
-                            : theme === "rainy"
-                            ? "text-blue-500"
-                            : theme === "dark"
-                            ? "text-gray-400"
-                            : "text-blue-500"
-                        }
-                      />
-                      <h3 className="font-bold">{item.name}</h3>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <p>{Math.round(item.temp)}°C</p>
-                      <p className="capitalize">{item.description}</p>
-                    </div>
-                    <p className="text-xs opacity-60 mt-1">⏰ {item.time}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </div>
-
-        {/* Footer */}
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-y-auto w-full px-4 sm:px-6 py-4">
         <motion.div
-          className="mt-8 flex flex-col items-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          className="w-full max-w-4xl mx-auto flex flex-col items-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-center">
+            {getWeatherIcon(weatherData?.weather[0].main || "Clear")} Weather Forecast
+          </h1>
+
+          {/* Search Section */}
+          <div className={`${themeStyles.card} backdrop-blur-md rounded-xl shadow-lg w-full max-w-md p-4 mb-6`}>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                <input
+                  type="text"
+                  placeholder="Enter city name..."
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && getWeather()}
+                  className="w-full pl-10 p-3 rounded-lg bg-white/90 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-sm"
+                />
+              </div>
+              <button
+                onClick={getWeather}
+                className={`${themeStyles.button} text-white px-4 py-3 rounded-lg shadow-md transition-all hover:scale-105 flex items-center justify-center gap-2`}
+              >
+                <FaSearch /> Search
+              </button>
+            </div>
+
+            {loading && (
+              <div className="flex justify-center py-4">
+                <ImSpinner9 className="animate-spin text-3xl" />
+              </div>
+            )}
+
+            {error && (
+              <div className={`${themeStyles.error} text-white px-4 py-2 rounded-lg text-center mt-2 text-sm`}>
+                {error}
+              </div>
+            )}
+          </div>
+
+          {/* Current Weather */}
+          {weatherData && (
+            <motion.div
+              ref={cardRef}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className={`${themeStyles.card} w-full max-w-md p-5 rounded-xl shadow-xl mb-8`}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h2 className="text-xl font-bold flex items-center gap-2">
+                    <FaMapMarkerAlt className="text-red-500" />
+                    {weatherData.name}, {weatherData.sys.country}
+                  </h2>
+                  <p className="text-sm opacity-80">
+                    {new Date().toLocaleDateString("en-US", {
+                      weekday: "long",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
+                <div className="text-4xl">
+                  {getWeatherIcon(weatherData.weather[0].main)}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className={`${themeStyles.metric} p-3 rounded-lg flex flex-col items-center`}>
+                  <FaTemperatureHigh className="text-xl mb-1" />
+                  <p className="text-sm">Temp</p>
+                  <p className="text-xl font-bold">{Math.round(weatherData.main.temp)}°C</p>
+                </div>
+                <div className={`${themeStyles.metric} p-3 rounded-lg flex flex-col items-center`}>
+                  <FaTint className="text-xl mb-1" />
+                  <p className="text-sm">Humidity</p>
+                  <p className="text-xl font-bold">{weatherData.main.humidity}%</p>
+                </div>
+                <div className={`${themeStyles.metric} p-3 rounded-lg flex flex-col items-center`}>
+                  <FaWind className="text-xl mb-1" />
+                  <p className="text-sm">Wind</p>
+                  <p className="text-xl font-bold">{weatherData.wind.speed} m/s</p>
+                </div>
+              </div>
+
+              <div className={`${themeStyles.metric} p-3 rounded-lg text-center`}>
+                <p className="text-sm">Conditions</p>
+                <p className="text-lg font-medium capitalize">
+                  {weatherData.weather[0].description}
+                </p>
+              </div>
+
+              <button
+                onClick={downloadScreenshot}
+                className={`w-full mt-4 ${themeStyles.button} text-white py-2 px-4 rounded-lg transition-all hover:scale-[1.02] shadow-md`}
+              >
+                📸 Download Weather Card
+              </button>
+            </motion.div>
+          )}
+
+          {/* Forecast & History */}
+          <div className="w-full space-y-6">
+            {/* 7-Day Forecast */}
+            {forecastData && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="w-full"
+              >
+                <h2 className="text-xl font-semibold mb-3 text-center">5-Day Forecast</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+                  {forecastData.map((day, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      whileHover={{ scale: 1.05 }}
+                      className={`${themeStyles.metric} p-2 rounded-lg flex flex-col items-center`}
+                    >
+                      <p className="font-medium text-sm">{getDayName(day.dt_txt)}</p>
+                      <div className="my-1">
+                        {getWeatherIcon(day.weather[0].main)}
+                      </div>
+                      <p className="font-bold">{Math.round(day.main.temp)}°</p>
+                      <p className="text-xs opacity-80 capitalize">
+                        {day.weather[0].description}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Search History */}
+            {history.length > 0 && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="w-full"
+              >
+                <h2 className="text-xl font-semibold mb-3 text-center">Recent Searches</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  {history.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      whileHover={{ scale: 1.02 }}
+                      className={`${themeStyles.card} p-3 rounded-lg shadow-sm`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <FaMapMarkerAlt
+                          className={
+                            theme === "sunny"
+                              ? "text-amber-500"
+                              : theme === "rainy"
+                              ? "text-blue-500"
+                              : theme === "dark"
+                              ? "text-gray-400"
+                              : "text-blue-500"
+                          }
+                        />
+                        <h3 className="font-bold">{item.name}</h3>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <p>{Math.round(item.temp)}°C</p>
+                        <p className="capitalize">{item.description}</p>
+                      </div>
+                      <p className="text-xs opacity-60 mt-1">⏰ {item.time}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Fixed Footer */}
+      <footer className="w-full py-4 bg-white/10 backdrop-blur-md border-t border-white/20">
+        <div className="flex flex-col items-center">
           <div className="flex gap-4 text-xl mb-2">
             <a
               href="https://abishek-s-2002-portfolio-57dab.web.app/"
@@ -587,8 +542,8 @@ const Weather = () => {
           <p className="text-sm opacity-80">
             © {new Date().getFullYear()} Abishek S
           </p>
-        </motion.div>
-      </motion.div>
+        </div>
+      </footer>
 
       {/* Animations CSS */}
       <style>
@@ -604,6 +559,22 @@ const Weather = () => {
             50% { opacity: 1; }
           }
           .animate-twinkle { animation: twinkle 5s infinite; }
+
+          /* Custom scrollbar */
+          .overflow-y-auto {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+          }
+          .overflow-y-auto::-webkit-scrollbar {
+            width: 6px;
+          }
+          .overflow-y-auto::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .overflow-y-auto::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 3px;
+          }
         `}
       </style>
     </div>
